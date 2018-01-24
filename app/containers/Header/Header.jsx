@@ -10,7 +10,6 @@ import DropdownMenu, {
   DropdownItemGroup,
   DropdownItem,
 } from '@atlaskit/dropdown-menu';
-import RefreshIcon from '@atlaskit/icon/glyph/refresh';
 import {
   shell,
 } from 'electron';
@@ -34,6 +33,7 @@ import {
 } from 'selectors';
 import {
   cogIcon,
+  refreshWhite,
 } from 'data/svg';
 import config from 'config';
 
@@ -50,6 +50,7 @@ import {
   UpdateAvailableBadge,
   DropdownLogoutItem,
   DropdownUpdateItem,
+  RefreshIcon,
 } from './styled';
 
 import type {
@@ -98,7 +99,10 @@ const Header: StatelessFunctionalComponent<Props> = ({
     </ProfileContainer>
 
     <IconsContainer>
-      <RefreshIcon />
+      <RefreshIcon
+        src={refreshWhite}
+        alt="Refresh"
+      />
       {updateAvailable && <UpdateAvailableBadge />}
       <DropdownMenu
         triggerType="default"

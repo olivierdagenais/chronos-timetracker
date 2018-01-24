@@ -46,8 +46,20 @@ export const ProfileInfo = styled.div`
   color: white;
 `;
 
+export const RefreshIcon = styled.img`
+  height: 22px;
+  cursor: pointer;
+  transition: transform .5s ease-in-out;
+  -webkit-app-region: drag;
+  user-select: none;
+  margin-right: 8px;
+  :hover {
+    transform: rotate(180deg);
+  }
+`;
+
 export const SettingsIcon = styled.img`
-  height: 26px;
+  height: 22px;
   cursor: pointer;
   border-radius: 50%;
   transition: transform .5s ease-in-out;
