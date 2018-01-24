@@ -112,7 +112,7 @@ export const SidebarNothingSelected = styled.span`
   margin-top: 25px;
 `;
 
-export const SidebarWrapper = styled.div`
+export const SidebarContainer = styled.div`
   display: flex;
   flex-flow: column nowrap;
   height: 100%;
@@ -120,7 +120,7 @@ export const SidebarWrapper = styled.div`
   background: #fff;
 `;
 
-export const SidebarContainer = styled.div`
+export const SidebarList = styled.div`
   display: flex;
   flex-flow: column nowrap;
   word-break: normal;

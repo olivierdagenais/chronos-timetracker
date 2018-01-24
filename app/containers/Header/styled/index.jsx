@@ -1,5 +1,10 @@
 import styled from 'styled-components2';
-import { DropdownItem } from '@atlaskit/dropdown-menu';
+import {
+  Flex,
+} from 'components';
+import {
+  DropdownItem,
+} from '@atlaskit/dropdown-menu';
 
 // padding top is 15px to avoid OS X window bar
 // background-color: ${props => props.theme.primary};
@@ -15,12 +20,12 @@ export const HeaderContainer = styled.header`
   -webkit-app-region: drag;
 `;
 
-export const Name = styled.span`
+export const ProfileName = styled.span`
   font-weight: 600;
   font-size: 16px;
 `;
 
-export const Team = styled.span`
+export const ProfileTeam = styled.span`
   // cursor: pointer;
 `;
 
@@ -29,6 +34,11 @@ export const DropdownSeparator = styled.div`
   height: 1px;
   background: #e1e4e9;
 `;
+
+export const ProfileContainer = styled(Flex).attrs({
+  row: true,
+  alignCenter: true,
+})``;
 
 export const ProfileInfo = styled.div`
   display: flex;
@@ -79,6 +89,12 @@ export const UpdateAvailableBadge = styled.div`
   top: -3px;
   border: 2px solid #1d61c7;
   z-index: 2;
+`;
+
+export const IconsContainer = styled(Flex).attrs({
+  row: true,
+})`
+  position: relative;
 `;
 
 export const DropdownLogoutItem = styled(DropdownItem)`
