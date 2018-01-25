@@ -1,24 +1,37 @@
 // @flow
 import React from 'react';
-import type { StatelessFunctionalComponent, Node } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { issuesActions, uiActions } from 'actions';
 import {
+  connect,
+} from 'react-redux';
+import {
+  bindActionCreators,
+} from 'redux';
+import {
+  ipcRenderer,
+} from 'electron';
+
+import type {
+  StatelessFunctionalComponent,
+  Node,
+} from 'react';
+
+import {
+  issuesActions,
+  uiActions,
+} from 'actions';
+import {
+  getCurrentProjectId,
   getSidebarFiltersOpen,
   getIssuesSearchValue,
-  getIssuesFetching,
   getFiltersApplied,
 } from 'selectors';
-
-import { refresh } from 'data/svg';
 
 import {
   SearchBar,
   SearchIcon,
   SearchInput,
   SearchOptions,
-  RefreshIcon,
+  AddIcon,
   FilterIcon,
   FiltersAppliedBadge,
 } from './styled';
@@ -26,18 +39,16 @@ import {
 import type {
   SetSidebarFiltersOpen,
   SetIssuesSearchValue,
-  ClearIssues,
-  FetchIssuesRequest,
-} from '../../types';
+} from '../../../types';
 
 type Props = {
+  host: string,
+  protocol: string,
+  currentProjectId: string,
   searchValue: string,
   isSidebarFiltersOpen: boolean,
   setSidebarFiltersOpen: SetSidebarFiltersOpen,
   setIssuesSearchValue: SetIssuesSearchValue,
-  clearIssues: ClearIssues,
-  fetchIssuesRequest: FetchIssuesRequest,
-  fetching: boolean,
   filtersApplied: boolean,
 }
 
@@ -46,10 +57,10 @@ const SidebarSearch: StatelessFunctionalComponent<Props> = ({
   isSidebarFiltersOpen,
   setSidebarFiltersOpen,
   setIssuesSearchValue,
-  clearIssues,
-  fetchIssuesRequest,
-  fetching,
   filtersApplied,
+  currentProjectId,
+  host,
+  protocol,
 }: Props): Node =>
   <SearchBar>
     <SearchIcon
@@ -65,16 +76,17 @@ const SidebarSearch: StatelessFunctionalComponent<Props> = ({
       }}
     />
     <SearchOptions>
-      <RefreshIcon
-        alt="Refresh"
-        src={refresh}
-        isFetching={fetching}
-        onClick={() => {
-          clearIssues();
-          fetchIssuesRequest();
-        }}
-      />
       <span className="pointer">
+        <AddIcon
+          label="Add"
+          size="medium"
+          onClick={() => {
+            ipcRenderer.send(
+              'open-create-issue-window',
+              `${protocol}://${host}/secure/CreateIssue.jspa?pid=${currentProjectId}`,
+            );
+          }}
+        />
         <FilterIcon
           label="Filter"
           size="medium"
@@ -90,8 +102,10 @@ const SidebarSearch: StatelessFunctionalComponent<Props> = ({
 
 function mapStateToProps(state) {
   return {
+    host: state.profile.host,
+    protocol: state.profile.protocol,
+    currentProjectId: getCurrentProjectId(state),
     searchValue: getIssuesSearchValue(state),
-    fetching: getIssuesFetching(state),
     isSidebarFiltersOpen: getSidebarFiltersOpen(state),
     filtersApplied: getFiltersApplied(state),
   };

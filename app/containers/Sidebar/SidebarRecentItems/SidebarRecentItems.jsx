@@ -7,6 +7,7 @@ import { Flex, RecentItemsPlaceholder } from 'components';
 import { uiActions, issuesActions, worklogsActions } from 'actions';
 import {
   getRecentIssuesFetching,
+  getProjectsFetching,
   getSidebarType,
   getRecentItems,
   getSelectedWorklogId,
@@ -41,6 +42,7 @@ type Props = {
   items: IssuesMap,
   selectedWorklogId: Id | null,
   fetching: boolean,
+  projectsFetching: boolean,
   sidebarType: string,
   selectIssue: SelectIssue,
   selectWorklog: SelectWorklog,
@@ -63,11 +65,12 @@ const SidebarRecentItems: StatelessFunctionalComponent<Props> = ({
   items,
   selectedWorklogId,
   fetching,
+  projectsFetching,
   sidebarType,
   selectIssue,
   selectWorklog,
   setIssueViewTab,
-}: Props): Node => (fetching ?
+}: Props): Node => ((fetching || projectsFetching) ?
   <RecentItemsPlaceholder /> :
   <RecentItemsContainer style={{ display: sidebarType === 'recent' ? 'block' : 'none' }}>
     {Object.keys(items).sort(daySorter).map((key) => {
@@ -103,6 +106,7 @@ function mapStateToProps(state) {
     items: getRecentItems(state),
     selectedWorklogId: getSelectedWorklogId(state),
     fetching: getRecentIssuesFetching(state),
+    projectsFetching: getProjectsFetching(state),
     sidebarType: getSidebarType(state),
   };
 }

@@ -12,10 +12,10 @@ function allItems(state: Array<Id> = [], action): Array<Id> {
     case types.FILL_ISSUES:
       return action.payload.ids;
     case types.ADD_ISSUES:
-      return union(
-        state,
-        action.payload.ids,
-      );
+      return [
+        ...action.payload.ids,
+        ...state,
+      ];
     case types.CLEAR_ISSUES:
     case types.___CLEAR_ALL_REDUCERS___:
       return [];

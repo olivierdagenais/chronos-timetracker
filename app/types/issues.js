@@ -188,6 +188,16 @@ export type FetchIssuesRequest = {
 }
 
 //
+export type FetchRecentIssuesRequestAction =
+  {|
+    type: typeof types.FETCH_RECENT_ISSUES_REQUEST,
+  |}
+
+export type FetchRecentIssuesRequest = {
+  (): FetchRecentIssuesRequestAction
+}
+
+//
 export type FillIssuesAction =
   {| type: typeof types.FILL_ISSUES, +payload: { ids: Array<Id>, map: IssuesMap }|}
 

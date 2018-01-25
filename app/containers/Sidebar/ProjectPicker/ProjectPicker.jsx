@@ -1,11 +1,20 @@
 // @flow
 import React from 'react';
-import type { Node } from 'react';
-import type { HOC } from 'recompose';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { lifecycle } from 'recompose';
-import { SingleSelect } from 'components';
+import {
+  connect,
+} from 'react-redux';
+import {
+  bindActionCreators,
+} from 'redux';
+
+import type {
+  StatelessFunctionalComponent,
+  Node,
+} from 'react';
+
+import {
+  SingleSelect,
+} from 'components';
 
 import {
   getSelectedProjectOption,
@@ -17,15 +26,20 @@ import {
   getSelectedProjectType,
 } from 'selectors';
 
-import { projectsActions } from 'actions';
+import {
+  projectsActions,
+} from 'actions';
 
-import type { SelectOption, SelectSprint, SelectProject } from '../../types';
+import {
+  ProjectPickerContainer,
+} from './styled';
 
-const enhance = lifecycle({
-  componentDidMount() {
-    this.props.fetchProjectsRequest();
-  },
-});
+import type {
+  SelectOption,
+  SelectSprint,
+  SelectProject,
+} from '../../../types';
+
 
 type Props = {
   options: Array<SelectOption>,
@@ -37,10 +51,9 @@ type Props = {
   projectsFetching: boolean,
   sprintsFetching: boolean,
   projectType: string,
-  disabled: boolean,
-}
+};
 
-const ProjectPicker: HOC<*, Props> = enhance(({
+const ProjectPicker: StatelessFunctionalComponent<Props> = ({
   options,
   sprintsOptions,
   selectedProjectOption,
@@ -50,17 +63,13 @@ const ProjectPicker: HOC<*, Props> = enhance(({
   projectsFetching,
   sprintsFetching,
   projectType,
-}): Node => (
-  <div
-    style={{
-      padding: '20px',
-      borderBottom: '1px solid #e1e4e9',
-    }}
-  >
+}: Props): Node =>
+  <ProjectPickerContainer>
     <SingleSelect
       items={options}
       hasAutocomplete
       selectedItem={selectedProjectOption}
+      defaultSelected={selectedProjectOption}
       placeholder="Select Project"
       onSelected={({ item }) => {
         const type = item.meta.board ? item.meta.board.type : 'project';
@@ -86,8 +95,7 @@ const ProjectPicker: HOC<*, Props> = enhance(({
         noMatchesFound="Nothing found"
       />
     }
-  </div>
-));
+  </ProjectPickerContainer>;
 
 function mapStateToProps(state) {
   return {
@@ -98,8 +106,6 @@ function mapStateToProps(state) {
     projectsFetching: getProjectsFetching(state),
     sprintsFetching: getSprintsFetching(state),
     projectType: getSelectedProjectType(state),
-    // TODO disable if issues fetching
-    disabled: false,
   };
 }
 

@@ -26,6 +26,7 @@ import normalizePayload from 'normalize-util';
 import { throwError, infoLog, notify } from './ui';
 import { setToStorage, getFromStorage } from './storage';
 import { getAdditionalWorklogsForIssues } from './worklogs';
+import createIpcChannel from './ipc';
 
 import type {
   FetchIssuesRequestAction,
@@ -227,6 +228,10 @@ export function* fetchRecentIssues(): Generator<*, *, *> {
     yield call(throwError, err);
     Raven.captureException(err);
   }
+}
+
+export function* watchFetchRecentIssuesRequest(): Generator<*, *, *> {
+  yield takeEvery(types.FETCH_RECENT_ISSUES_REQUEST, fetchRecentIssues);
 }
 
 export function* getIssueComments(): Generator<*, void, *> {
@@ -518,4 +523,37 @@ export function* addIssueCommentFlow(): Generator<*, void, *> {
     yield call(throwError, err);
     Raven.captureException(err);
   }
+}
+
+function getNewIssueChannelListener(channel) {
+  return function* listenNewIssue() {
+    while (true) {
+      const { payload } = yield take(channel);
+      try {
+        const issueKey = payload[0];
+        const issue = yield call(Api.fetchIssueByKey, issueKey);
+        const totalCountIssues = yield select(state => state.issues.meta.totalCount);
+        yield put(issuesActions.addIssues({
+          map: {
+            [issue.id]: issue,
+          },
+          ids: [issue.id],
+        }));
+        yield put(issuesActions.setIssuesTotalCount(totalCountIssues + 1));
+        yield put(issuesActions.selectIssue(issue));
+        yield call(
+          notify,
+          '',
+          `${issue.key} was created`,
+        );
+      } catch (err) {
+        Raven.captureException(err);
+      }
+    }
+  };
+}
+
+export function* createIpcNewIssueListener(): void {
+  const newIssueChannel = yield call(createIpcChannel, 'newIssue');
+  yield fork(getNewIssueChannelListener(newIssueChannel));
 }

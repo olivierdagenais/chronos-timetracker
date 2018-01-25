@@ -1,5 +1,6 @@
 // @flow
 export const FETCH_ISSUES_REQUEST: 'issues/FETCH_REQUEST' = 'issues/FETCH_REQUEST';
+export const FETCH_RECENT_ISSUES_REQUEST: 'issues/FETCH_RECENT_REQUEST' = 'issues/FETCH_RECENT_REQUEST';
 export const FILL_ISSUES: 'issues/FILL' = 'issues/FILL';
 export const FILL_RECENT_ISSUE_IDS: 'issues/FILL_RECENT_IDS' = 'issues/FILL_RECENT_IDS';
 export const FILL_FOUND_ISSUE_IDS: 'issues/FILL_FOUND_ISSUE_IDS' = 'issues/FILL_FOUND_ISSUE_IDS';

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
   getSidebarIssues,
+  getProjectsFetching,
   getIssuesFetching,
   getIssuesSearching,
   getIssuesTotalCount,
@@ -26,6 +27,7 @@ import type {
 type Props = {
   items: IssuesMap,
   fetching: boolean,
+  projectsFetching: boolean,
   searching: boolean,
   totalCount: number,
   selectedIssueId: Id | null,
@@ -37,6 +39,7 @@ type Props = {
 const SidebarAllItems: StatelessFunctionalComponent<Props> = ({
   items,
   fetching,
+  projectsFetching,
   searching,
   totalCount,
   selectedIssueId,
@@ -60,15 +63,14 @@ const SidebarAllItems: StatelessFunctionalComponent<Props> = ({
       autoSized: true,
       // scrollToIndex: selectedIssueIndex,
       scrollToAlignment: 'center',
-      rowCount: (totalCount === 0 && fetching) ? 10 : totalCount,
+      rowCount: (totalCount === 0 && (fetching || projectsFetching)) ? 10 : totalCount,
       rowHeight: 101,
       // eslint-disable-next-line react/prop-types
       rowRenderer: ({ index, key, style }) => {
         const item: ?Issue = items[index];
-        if (searching && fetching) {
+        if (searching && (fetching || projectsFetching)) {
           return <IssueItemPlaceholder key={key} />;
         }
-
         return (
           <div style={style} key={key}>
             {item
@@ -90,6 +92,7 @@ function mapStateToProps(state) {
   return {
     items: getSidebarIssues(state),
     fetching: getIssuesFetching(state),
+    projectsFetching: getProjectsFetching(state),
     searching: getIssuesSearching(state),
     totalCount: getIssuesTotalCount(state),
     selectedIssueId: getSelectedIssueId(state),

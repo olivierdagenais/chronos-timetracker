@@ -1,5 +1,6 @@
 import * as types from './actionTypes';
 import type {
+  FetchRecentIssuesRequest, FetchRecentIssuesRequestAction,
   FetchIssuesRequest, FetchIssuesRequestAction,
   FillIssues, FillIssuesAction,
   FillRecentIssueIds, FillRecentIssueIdsAction,
@@ -44,6 +45,11 @@ export const fetchIssuesRequest: FetchIssuesRequest = (
   type: types.FETCH_ISSUES_REQUEST,
   payload,
 });
+
+export const fetchRecentIssuesRequest: FetchRecentIssuesRequest =
+  (): FetchRecentIssuesRequestAction => ({
+    type: types.FETCH_RECENT_ISSUES_REQUEST,
+  });
 
 export const fillIssues: FillIssues = (
   payload: { ids: Array<Id>, map: IssuesMap },

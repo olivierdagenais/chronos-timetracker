@@ -16,6 +16,7 @@ import {
   uiActions,
 } from 'actions';
 import {
+  getProjectsFetching,
   getSidebarType,
   getSelectedProjectId,
   getSidebarFiltersOpen,
@@ -41,6 +42,7 @@ import type {
 
 
 type Props = {
+  projectsFetching: boolean,
   sidebarType: SidebarType,
   setSidebarType: SetSidebarType,
   selectedProjectId: Id | null,
@@ -48,6 +50,7 @@ type Props = {
 };
 
 const Sidebar: StatelessFunctionalComponent<Props> = ({
+  projectsFetching,
   sidebarType,
   setSidebarType,
   selectedProjectId,
@@ -66,7 +69,7 @@ const Sidebar: StatelessFunctionalComponent<Props> = ({
       {sidebarFiltersOpen &&
         <SidebarFilters />
       }
-      {selectedProjectId ?
+      {(selectedProjectId || projectsFetching) ?
         <SidebarItems /> :
         <SidebarNothingSelected>
           <span>Select project from dropdown above</span>
@@ -78,6 +81,7 @@ const Sidebar: StatelessFunctionalComponent<Props> = ({
 
 function mapStateToProps(state) {
   return {
+    projectsFetching: getProjectsFetching(state),
     sidebarType: getSidebarType(state),
     selectedProjectId: getSelectedProjectId(state),
     sidebarFiltersOpen: getSidebarFiltersOpen(state),

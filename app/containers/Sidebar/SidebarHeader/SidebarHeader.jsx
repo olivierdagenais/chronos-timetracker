@@ -6,10 +6,16 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { uiActions } from 'actions';
 
-import { TabContainer } from './styled';
+import {
+  TabContainer,
+} from './styled';
 import SidebarHeaderTab from './SidebarHeaderTab';
 
-import type { SetSidebarType, SidebarType } from '../../types';
+import type {
+  SetSidebarType,
+  SidebarType,
+} from '../../../types';
+
 
 type Props = {
   sidebarType: SidebarType,
@@ -33,10 +39,6 @@ const SidebarHeader: StatelessFunctionalComponent<Props> = ({
     />
   </TabContainer>;
 
-// <TabIcon src={issuesBlue} alt="" />
-// <TabIcon src={recent} alt="" />
-// <TabIcon src={star} alt="" />
-//
 function mapStateToProps(state) {
   return {
     sidebarType: getSidebarType(state),

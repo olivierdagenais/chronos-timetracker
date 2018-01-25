@@ -2,8 +2,14 @@
 import React from 'react';
 import type { StatelessFunctionalComponent, Node } from 'react';
 
-import { Tab } from './styled';
-import type { SetSidebarType } from '../../types';
+import type {
+  SetSidebarType,
+} from '../../../types';
+
+import {
+  Tab,
+} from './styled';
+
 
 type Props = {
   active: boolean,

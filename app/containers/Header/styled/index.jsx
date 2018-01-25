@@ -47,11 +47,12 @@ export const ProfileInfo = styled.div`
 `;
 
 export const RefreshIcon = styled.img`
-  height: 22px;
+  height: 20px;
   cursor: pointer;
   transition: transform .5s ease-in-out;
   -webkit-app-region: drag;
   user-select: none;
+  margin-top: 1px;
   margin-right: 8px;
   :hover {
     transform: rotate(180deg);

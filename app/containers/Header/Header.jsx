@@ -24,12 +24,14 @@ import {
   authActions,
   uiActions,
   settingsActions,
+  issuesActions,
 } from 'actions';
 import {
   getUserData,
   getHost,
   getUpdateAvailable,
   getUpdateFetching,
+  getIssuesFetching,
 } from 'selectors';
 import {
   cogIcon,
@@ -59,14 +61,22 @@ import type {
   UpdateInfo,
   SetSettingsModalOpen,
   SetSettingsModalTab,
+  ClearIssues,
+  FetchIssuesRequest,
+  FetchRecentIssuesRequest,
 } from '../../types';
 
 
 type Props = {
   userData: User,
   host: URL,
+  isFetching: boolean,
   updateAvailable: UpdateInfo,
   updateFetching: boolean,
+
+  clearIssues: ClearIssues,
+  fetchIssuesRequest: FetchIssuesRequest,
+  fetchRecentIssuesRequest: FetchRecentIssuesRequest,
 
   logoutRequest: LogoutRequest,
   setSettingsModalOpen: SetSettingsModalOpen,
@@ -76,11 +86,15 @@ type Props = {
 const Header: StatelessFunctionalComponent<Props> = ({
   userData,
   host,
+  isFetching,
   updateAvailable,
   updateFetching,
   logoutRequest,
   setSettingsModalOpen,
   setSettingsModalTab,
+  clearIssues,
+  fetchIssuesRequest,
+  fetchRecentIssuesRequest,
 }: Props): Node =>
   <HeaderContainer className="webkit-drag">
     <ProfileContainer>
@@ -101,6 +115,12 @@ const Header: StatelessFunctionalComponent<Props> = ({
     <IconsContainer>
       <RefreshIcon
         src={refreshWhite}
+        isFetching={isFetching}
+        onClick={() => {
+          clearIssues();
+          fetchIssuesRequest();
+          fetchRecentIssuesRequest();
+        }}
         alt="Refresh"
       />
       {updateAvailable && <UpdateAvailableBadge />}
@@ -153,6 +173,7 @@ function mapStateToProps(state) {
     host: getHost(state),
     updateAvailable: getUpdateAvailable(state),
     updateFetching: getUpdateFetching(state),
+    isFetching: getIssuesFetching(state),
   };
 }
 
@@ -162,6 +183,7 @@ function mapDispatchToProps(dispatch) {
     ...authActions,
     ...uiActions,
     ...settingsActions,
+    ...issuesActions,
   }, dispatch);
 }
 
