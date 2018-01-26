@@ -19,6 +19,7 @@ export const SidebarNothingSelected = styled.span`
 export const SidebarContainer = styled.div`
   display: flex;
   flex-flow: column nowrap;
+  overflow: hidden;
   height: 100%;
   max-width: 435px;
   background: #fff;
