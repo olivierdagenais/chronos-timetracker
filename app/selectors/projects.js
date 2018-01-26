@@ -104,6 +104,9 @@ export const getSelectedProjectOption = createSelector(
 export const getCurrentProjectId = createSelector(
   [getSelectedProjectOption, getSelectedProjectType],
   (option, projectType) => {
+    if (!option) {
+      return null;
+    }
     if (projectType === 'project') {
       return option.value;
     }

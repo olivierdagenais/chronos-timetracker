@@ -23,15 +23,19 @@ import {
 } from 'selectors';
 
 import ProjectPicker from './ProjectPicker';
-import SidebarHeader from './SidebarHeader';
 import SidebarSearch from './SidebarSearch';
 import SidebarFilters from './SidebarFilters/SidebarFilters';
 import SidebarItems from './SidebarItems/SidebarItems';
+import SidebarIssues from './SidebarIssues'
+import SidebarAllItems from './SidebarItems/SidebarAllItems';
+import SidebarRecentItems from './SidebarRecentItems';
 
 import {
   SidebarNothingSelected,
   SidebarContainer,
-  SidebarList,
+  TabContainer,
+  ListContainer,
+  Tab,
 } from './styled';
 
 import type {
@@ -58,24 +62,24 @@ const Sidebar: StatelessFunctionalComponent<Props> = ({
 }: Props): Node => (
   <SidebarContainer>
     <ProjectPicker />
-    <SidebarHeader
-      sidebarType={sidebarType}
-      setSidebarType={setSidebarType}
-    />
-    <SidebarList>
-      {sidebarType === 'all' &&
-        <SidebarSearch />
-      }
-      {sidebarFiltersOpen &&
-        <SidebarFilters />
-      }
-      {(selectedProjectId || projectsFetching) ?
-        <SidebarItems /> :
-        <SidebarNothingSelected>
-          <span>Select project from dropdown above</span>
-        </SidebarNothingSelected>
-      }
-    </SidebarList>
+    <TabContainer>
+      <Tab
+        active={sidebarType === 'recent'}
+        onClick={() => setSidebarType('recent')}
+      >
+        Recent worklogs
+      </Tab>
+      <Tab
+        active={sidebarType === 'all'}
+        onClick={() => setSidebarType('all')}
+      >
+        Issues
+      </Tab>
+    </TabContainer>
+    <ListContainer>
+      <SidebarIssues />
+      <SidebarRecentItems />
+    </ListContainer>
   </SidebarContainer>
 );
 

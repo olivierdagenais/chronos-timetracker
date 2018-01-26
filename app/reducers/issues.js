@@ -1,11 +1,23 @@
 // @flow
-import { combineReducers } from 'redux';
+import {
+  combineReducers,
+} from 'redux';
+import * as R from 'ramda';
+
 import union from 'lodash.union';
 import merge from 'lodash.merge';
 import filter from 'lodash.filter';
-import { types } from 'actions';
+import {
+  types,
+} from 'actions';
+import type {
+  Id,
+  IssuesMap,
+  IssuesMeta,
+  IssueTypesMap,
+  IssueStatusesMap,
+} from '../types';
 
-import type { Id, IssuesMap, IssuesMeta, IssueTypesMap, IssueStatusesMap } from '../types';
 
 function allItems(state: Array<Id> = [], action): Array<Id> {
   switch (action.type) {
@@ -16,6 +28,23 @@ function allItems(state: Array<Id> = [], action): Array<Id> {
         ...action.payload.ids,
         ...state,
       ];
+    case types.CLEAR_ISSUES:
+    case types.___CLEAR_ALL_REDUCERS___:
+      return [];
+    default:
+      return state;
+  }
+}
+
+function allIndexedIds(state: Array<Id> = [], action): Array<Id> {
+  switch (action.type) {
+    case types.FILL_ISSUES:
+      return action.payload.indexedIds;
+    case types.ADD_ISSUES:
+      return R.mergeDeepRight(
+        state,
+        action.payload.indexedIds,
+      );
     case types.CLEAR_ISSUES:
     case types.___CLEAR_ALL_REDUCERS___:
       return [];
@@ -304,6 +333,7 @@ function meta(state: IssuesMeta = initialMeta, action) {
 export default combineReducers({
   byId: itemsById,
   allIds: allItems,
+  indexedIds: allIndexedIds,
   issueTypesIds,
   issueTypesById,
   issueStatusesIds,

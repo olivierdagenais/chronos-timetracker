@@ -39,8 +39,14 @@ export const fetchIssuesRequest: FetchIssuesRequest = (
   payload: {
     startIndex: number,
     stopIndex: number,
+    resolve: () => void,
     search: boolean,
-  } = { startIndex: 0, stopIndex: 10, search: false },
+  } = {
+    startIndex: 0,
+    stopIndex: 10,
+    resolve: null,
+    search: false,
+  },
 ): FetchIssuesRequestAction => ({
   type: types.FETCH_ISSUES_REQUEST,
   payload,

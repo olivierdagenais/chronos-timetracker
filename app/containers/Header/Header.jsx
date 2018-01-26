@@ -70,7 +70,6 @@ import type {
 type Props = {
   userData: User,
   host: URL,
-  isFetching: boolean,
   updateAvailable: UpdateInfo,
   updateFetching: boolean,
 
@@ -86,7 +85,6 @@ type Props = {
 const Header: StatelessFunctionalComponent<Props> = ({
   userData,
   host,
-  isFetching,
   updateAvailable,
   updateFetching,
   logoutRequest,
@@ -115,7 +113,6 @@ const Header: StatelessFunctionalComponent<Props> = ({
     <IconsContainer>
       <RefreshIcon
         src={refreshWhite}
-        isFetching={isFetching}
         onClick={() => {
           clearIssues();
           fetchIssuesRequest();
@@ -173,7 +170,6 @@ function mapStateToProps(state) {
     host: getHost(state),
     updateAvailable: getUpdateAvailable(state),
     updateFetching: getUpdateFetching(state),
-    isFetching: getIssuesFetching(state),
   };
 }
 
