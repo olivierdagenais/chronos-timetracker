@@ -72,7 +72,7 @@ const SidebarRecentItems: StatelessFunctionalComponent<Props> = ({
   setIssueViewTab,
 }: Props): Node => ((fetching || projectsFetching) ?
   <RecentItemsPlaceholder /> :
-  <RecentItemsContainer style={{ display: sidebarType === 'recent' ? 'block' : 'none' }}>
+  <RecentItemsContainer>
     {Object.keys(items).sort(daySorter).map((key) => {
       const item = items[key].sort(worklogSorter);
 

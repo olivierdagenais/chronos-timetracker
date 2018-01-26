@@ -35,6 +35,7 @@ import {
   SidebarContainer,
   TabContainer,
   ListContainer,
+  ListConcealer,
   Tab,
 } from './styled';
 
@@ -76,10 +77,10 @@ const Sidebar: StatelessFunctionalComponent<Props> = ({
         Issues
       </Tab>
     </TabContainer>
-    <ListContainer>
-      <SidebarIssues />
+    <ListConcealer sidebarType={sidebarType}>
       <SidebarRecentItems />
-    </ListContainer>
+      <SidebarIssues />
+    </ListConcealer>
   </SidebarContainer>
 );
 

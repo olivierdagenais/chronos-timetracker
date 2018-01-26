@@ -62,3 +62,12 @@ export const Tab = styled.div`
   }
 `;
 
+export const ListConcealer = styled.div`
+  display: flex;
+  transition: transform .25s ease-out;
+  height: 100%;
+  flex-flow: row nowrap;
+  width: 870px;
+  transform: translateX(${({ sidebarType }) => (sidebarType === 'all' ? -435 : 0)}px);
+  overflow: hidden;
+`;

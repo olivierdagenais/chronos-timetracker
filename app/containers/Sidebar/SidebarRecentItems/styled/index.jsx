@@ -16,10 +16,9 @@ export const Timestamp = styled.div`
 
 export const RecentItemsContainer = styled.div`
   height: 100%;
-  background: #F4F5F7;
+  flex: 1;
   z-index: 1;
-  overflow-y: overlay;
-  overflow-x: hidden;
+  background: #F4F5F7;
 `;
 
 export const RecentItemsBlock = styled.div`
