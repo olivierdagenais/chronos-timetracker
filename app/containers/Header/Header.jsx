@@ -62,7 +62,7 @@ import type {
   SetSettingsModalOpen,
   SetSettingsModalTab,
   ClearIssues,
-  FetchIssuesRequest,
+  SetRefetchIssuesIndicator,
   FetchRecentIssuesRequest,
 } from '../../types';
 
@@ -72,10 +72,11 @@ type Props = {
   host: URL,
   updateAvailable: UpdateInfo,
   updateFetching: boolean,
+  issuesFetching: boolean,
 
   clearIssues: ClearIssues,
-  fetchIssuesRequest: FetchIssuesRequest,
   fetchRecentIssuesRequest: FetchRecentIssuesRequest,
+  setRefetchIssuesIndicator: SetRefetchIssuesIndicator,
 
   logoutRequest: LogoutRequest,
   setSettingsModalOpen: SetSettingsModalOpen,
@@ -87,12 +88,13 @@ const Header: StatelessFunctionalComponent<Props> = ({
   host,
   updateAvailable,
   updateFetching,
+  issuesFetching,
   logoutRequest,
   setSettingsModalOpen,
   setSettingsModalTab,
   clearIssues,
-  fetchIssuesRequest,
   fetchRecentIssuesRequest,
+  setRefetchIssuesIndicator,
 }: Props): Node =>
   <HeaderContainer className="webkit-drag">
     <ProfileContainer>
@@ -114,9 +116,11 @@ const Header: StatelessFunctionalComponent<Props> = ({
       <RefreshIcon
         src={refreshWhite}
         onClick={() => {
-          clearIssues();
-          fetchIssuesRequest();
-          fetchRecentIssuesRequest();
+          if (!issuesFetching) {
+            clearIssues();
+            setRefetchIssuesIndicator(true);
+            fetchRecentIssuesRequest();
+          }
         }}
         alt="Refresh"
       />
@@ -169,6 +173,7 @@ function mapStateToProps(state) {
     userData: getUserData(state),
     host: getHost(state),
     updateAvailable: getUpdateAvailable(state),
+    issuesFetching: getIssuesFetching(state),
     updateFetching: getUpdateFetching(state),
   };
 }

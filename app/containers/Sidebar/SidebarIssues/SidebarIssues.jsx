@@ -11,6 +11,11 @@ import {
   AutoSizer,
   List,
 } from 'react-virtualized';
+import {
+  compose,
+  withHandlers,
+  lifecycle,
+} from 'recompose';
 
 import type {
   StatelessFunctionalComponent,
@@ -21,7 +26,6 @@ import {
   getSidebarIssues,
   getProjectsFetching,
   getIssuesFetching,
-  getIssuesSearching,
   getIssuesTotalCount,
   getSelectedIssueId,
   getTrackingIssueId,
@@ -49,99 +53,158 @@ import IssueItem from './IssueItem';
 
 type Props = {
   issues: IssuesMap,
-  fetching: boolean,
+  issuesFetching: boolean,
   projectsFetching: boolean,
-  searching: boolean,
+  noItems: boolean,
   totalCount: number,
   selectedIssueId: Id | null,
   trackingIssueId: Id | null,
   fetchIssuesRequest: FetchIssuesRequest,
   selectIssue: SelectIssue,
+  saveLastRenderedIndex: ({ startIndex: number, stopIndex: number }) => void,
+  saveOnRowsRenderedFunction: (Function) => void,
+  registerInfiniteNode: (Function) => void,
 };
 
 const SidebarAllItems: StatelessFunctionalComponent<Props> = ({
   issues,
-  fetching,
+  issuesFetching,
   projectsFetching,
-  searching,
   totalCount,
   selectedIssueId,
   trackingIssueId,
   fetchIssuesRequest,
   selectIssue,
+  noItems,
+  saveLastRenderedIndex,
+  saveOnRowsRenderedFunction,
+  registerInfiniteNode,
 }: Props): Node =>
   <ListContainer>
     <IssuesHeader />
-    <InfiniteLoader
-      isRowLoaded={({ index }) => !!issues[index]}
-      rowCount={totalCount}
-      minimumBatchSize={50}
-      threshold={20}
-      loadMoreRows={({ startIndex, stopIndex }) =>
-        new Promise((resolve) => {
-          fetchIssuesRequest({
-            startIndex,
-            stopIndex,
-            resolve,
-            search: false,
-          });
-        })
-      }
-    >
-      {({
-        onRowsRendered,
-        registerChild,
-      }) => (
-        <AutoSizer>
-          {({ height, width }) => (
-            <List
-              width={width}
-              height={height - 39}
-              registerChild={registerChild}
-              onRowsRendered={onRowsRendered}
-              scrollToAlignment="center"
-              rowCount={(totalCount === 0 && (fetching || projectsFetching)) ? 10 : totalCount}
-              rowHeight={101}
-              rowRenderer={({ index, key, style }) => {
-                const item: ?Issue = issues[index];
-                if (searching && (fetching || projectsFetching)) {
-                  return <IssueItemPlaceholder key={key} />;
-                }
-                return (
-                  <div style={style} key={key}>
-                    {item
-                      ? <IssueItem
-                        issue={item}
-                        active={selectedIssueId === item.id}
-                        tracking={trackingIssueId === item.id}
-                        selectIssue={selectIssue}
-                      />
-                      : <IssueItemPlaceholder />
-                      }
-                  </div>
-                );
-              }}
-            />
-          )}
-        </AutoSizer>
-      )}
-    </InfiniteLoader>
+    {noItems ?
+      <h1>No items</h1> :
+      <InfiniteLoader
+        isRowLoaded={({ index }) => !!issues[index]}
+        rowCount={totalCount}
+        ref={registerInfiniteNode}
+        minimumBatchSize={50}
+        threshold={20}
+        loadMoreRows={({ startIndex, stopIndex }) =>
+          new Promise((resolve) => {
+            fetchIssuesRequest({
+              startIndex,
+              stopIndex,
+              resolve,
+              search: false,
+            });
+          })
+        }
+      >
+        {({
+          onRowsRendered,
+          registerChild,
+        }) => {
+          saveOnRowsRenderedFunction(onRowsRendered);
+          return (
+            <AutoSizer>
+              {({ height, width }) => (
+                <List
+                  width={width}
+                  height={height - 39}
+                  registerChild={registerChild}
+                  onRowsRendered={(data) => {
+                    saveLastRenderedIndex(data);
+                    onRowsRendered(data);
+                  }}
+                  scrollToAlignment="center"
+                  rowCount={
+                    (totalCount === 0 && (issuesFetching || projectsFetching)) ? 10 : totalCount
+                  }
+                  rowHeight={101}
+                  rowRenderer={({ index, key, style }) => {
+                    const item: ?Issue = issues[index];
+                    return (
+                      <div style={style} key={key}>
+                        {item ?
+                          <IssueItem
+                            issue={item}
+                            active={selectedIssueId === item.id}
+                            tracking={trackingIssueId === item.id}
+                            selectIssue={selectIssue}
+                          /> :
+                          <IssueItemPlaceholder />
+                        }
+                      </div>
+                    );
+                  }}
+                />
+              )}
+            </AutoSizer>
+          );
+        }}
+      </InfiniteLoader>
+    }
   </ListContainer>;
 
 function mapStateToProps(state) {
+  const projectsFetching = getProjectsFetching(state);
+  const issuesFetching = getIssuesFetching(state);
+  const totalCount = getIssuesTotalCount(state);
   return {
     issues: getSidebarIssues(state),
-    fetching: getIssuesFetching(state),
-    projectsFetching: getProjectsFetching(state),
-    searching: getIssuesSearching(state),
-    totalCount: getIssuesTotalCount(state),
+    noItems: !projectsFetching && !issuesFetching && totalCount === 0,
+    projectsFetching,
+    issuesFetching,
+    totalCount,
     selectedIssueId: getSelectedIssueId(state),
     trackingIssueId: getTrackingIssueId(state),
+    refetchIssuesIndicator: state.issues.meta.refetchIssuesIndicator,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(issuesActions, dispatch);
+  return bindActionCreators({
+    ...issuesActions,
+  }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SidebarAllItems);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withHandlers(() => {
+    let infiniteNode;
+    let onRowsRendered;
+    let lastRenderedRows = {
+      startIndex: 0,
+      stopIndex: 10,
+    };
+    return {
+      saveLastRenderedIndex: () => (data) => {
+        lastRenderedRows = data;
+      },
+      registerInfiniteNode: () => (ref) => {
+        infiniteNode = ref;
+      },
+      saveOnRowsRenderedFunction: () => (f) => {
+        onRowsRendered = f;
+      },
+      resetLoadMoreRowsCache: () => () =>
+        infiniteNode.resetLoadMoreRowsCache(),
+      tellInfiniteLoaderToLoadRows: () => () =>
+        onRowsRendered(lastRenderedRows),
+    };
+  }),
+  lifecycle({
+    componentWillReceiveProps(nextProps) {
+      if (nextProps.refetchIssuesIndicator && !this.props.refetchIssuesIndicator) {
+        this.props.setRefetchIssuesIndicator(false);
+        this.props.resetLoadMoreRowsCache();
+        setTimeout(() => {
+          if (this.props.tellInfiniteLoaderToLoadRows) {
+            this.props.tellInfiniteLoaderToLoadRows();
+          }
+        }, 100);
+      }
+    },
+  }),
+)(SidebarAllItems);

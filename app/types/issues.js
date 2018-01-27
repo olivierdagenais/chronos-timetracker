@@ -278,6 +278,14 @@ export type SetRecentIssuesFetching = {
 }
 
 //
+export type SetRefetchIssuesIndicatorAction =
+  {| type: typeof types.SET_REFETCH_ISSUES_INDICATOR, +payload: boolean |}
+
+export type SetRefetchIssuesIndicator = {
+  (payload: boolean): SetRefetchIssuesIndicatorAction
+}
+
+//
 export type SetIssuesTotalCountAction =
   {| type: typeof types.SET_ISSUES_TOTAL_COUNT, +payload: number |}
 
@@ -437,8 +445,10 @@ export type IssuesAction =
   | AddIssuesAction
   | ClearIssuesAction
   | SetIssuesFetchingAction
+  | SetRefetchIssuesIndicatorAction
   | SetIssuesTotalCountAction
   | SelectIssueAction
   | SetTrackingIssueAction
   | SetIssuesSearchValueAction
   | SetIssuesFilterAction;
+

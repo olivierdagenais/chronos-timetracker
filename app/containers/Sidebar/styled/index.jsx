@@ -25,17 +25,6 @@ export const SidebarContainer = styled.div`
   background: #fff;
 `;
 
-export const ListContainer = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  word-break: normal;
-  word-wrap: break-word;
-  position: relative;
-  list-style: none;
-  margin: 0;
-  height: 100%;
-`;
-
 export const TabContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -63,7 +52,7 @@ export const Tab = styled.div`
   }
 `;
 
-export const ListConcealer = styled.div`
+export const ListContainer = styled.div`
   display: flex;
   transition: transform .25s ease-out;
   height: 100%;

@@ -23,19 +23,18 @@ import {
 } from 'selectors';
 
 import ProjectPicker from './ProjectPicker';
-import SidebarSearch from './SidebarSearch';
 import SidebarFilters from './SidebarFilters/SidebarFilters';
 import SidebarItems from './SidebarItems/SidebarItems';
 import SidebarIssues from './SidebarIssues'
 import SidebarAllItems from './SidebarItems/SidebarAllItems';
 import SidebarRecentItems from './SidebarRecentItems';
+import SidebarRecentWorklogs from './SidebarRecentWorklogs';
 
 import {
   SidebarNothingSelected,
   SidebarContainer,
   TabContainer,
   ListContainer,
-  ListConcealer,
   Tab,
 } from './styled';
 
@@ -77,10 +76,10 @@ const Sidebar: StatelessFunctionalComponent<Props> = ({
         Issues
       </Tab>
     </TabContainer>
-    <ListConcealer sidebarType={sidebarType}>
-      <SidebarRecentItems />
+    <ListContainer sidebarType={sidebarType}>
+      <SidebarRecentWorklogs />
       <SidebarIssues />
-    </ListConcealer>
+    </ListContainer>
   </SidebarContainer>
 );
 

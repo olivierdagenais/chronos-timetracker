@@ -69,7 +69,7 @@ const ProjectPicker: StatelessFunctionalComponent<Props> = ({
       items={options}
       hasAutocomplete
       selectedItem={selectedProjectOption}
-      defaultSelected={selectedProjectOption}
+      defaultSelected={selectedProjectOption || undefined}
       placeholder="Select Project"
       onSelected={({ item }) => {
         const type = item.meta.board ? item.meta.board.type : 'project';

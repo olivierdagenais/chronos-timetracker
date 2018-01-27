@@ -12,6 +12,7 @@ import type {
   ClearIssues, ClearIssuesAction,
   SetIssuesFetching, SetIssuesFetchingAction,
   SetRecentIssuesFetching, SetRecentIssuesFetchingAction,
+  SetRefetchIssuesIndicator, SetRefetchIssuesIndicatorAction,
   SetIssuesTotalCount, SetIssuesTotalCountAction,
   SelectIssue, SelectIssueAction,
   SetTrackingIssue, SetTrackingIssueAction,
@@ -128,6 +129,13 @@ export const setIssuesTotalCount: SetIssuesTotalCount = (
   payload: number,
 ): SetIssuesTotalCountAction => ({
   type: types.SET_ISSUES_TOTAL_COUNT,
+  payload,
+});
+
+export const setRefetchIssuesIndicator: SetRefetchIssuesIndicator = (
+  payload: boolean,
+): SetRefetchIssuesIndicatorAction => ({
+  type: types.SET_REFETCH_ISSUES_INDICATOR,
   payload,
 });
 

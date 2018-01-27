@@ -36,15 +36,15 @@ function allItems(state: Array<Id> = [], action): Array<Id> {
   }
 }
 
-function allIndexedIds(state: Array<Id> = [], action): Array<Id> {
+function allIndexedIds(state: { [number]: Id } = {}, action): Array<Id> {
   switch (action.type) {
     case types.FILL_ISSUES:
       return action.payload.indexedIds;
     case types.ADD_ISSUES:
-      return R.mergeDeepRight(
+      return action.payload.indexedIds ? R.mergeDeepRight(
         state,
         action.payload.indexedIds,
-      );
+      ) : state;
     case types.CLEAR_ISSUES:
     case types.___CLEAR_ALL_REDUCERS___:
       return [];
@@ -226,6 +226,7 @@ const initialMeta: IssuesMeta = {
   fetching: false,
   recentFetching: false,
   searching: false,
+  refetchIssuesIndicator: false,
   totalCount: 0,
   lastStopIndex: 0,
   selectedIssueId: null,
@@ -252,6 +253,11 @@ function meta(state: IssuesMeta = initialMeta, action) {
       return {
         ...state,
         searching: action.payload.search,
+      };
+    case types.SET_REFETCH_ISSUES_INDICATOR:
+      return {
+        ...state,
+        refetchIssuesIndicator: action.payload,
       };
     case types.SET_ISSUES_FETCHING:
       return {
