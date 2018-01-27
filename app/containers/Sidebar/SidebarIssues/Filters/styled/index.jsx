@@ -7,6 +7,7 @@ export const FiltersContainer = styled.div`
   height: calc(100% - 39px);
   top: 39px;
   width: 435px;
+  overflow-y: hidden;
 `;
 
 export const FilterItems = styled.div`
