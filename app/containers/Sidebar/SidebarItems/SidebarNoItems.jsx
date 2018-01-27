@@ -14,7 +14,11 @@ const SidebarNoItems: StatelessFunctionalComponent<Props> = ({ recent }: Props):
     column
     justifyCenter
     alignCenter
-    style={{ width: '100%', height: '100%', flex: '1 0 100%' }}
+    style={{
+      width: '100%',
+      height: '100%',
+      flex: '1 0 100%',
+    }}
   >
     <NoIssuesImage src={noIssuesImage} alt="Not found" />
     {recent

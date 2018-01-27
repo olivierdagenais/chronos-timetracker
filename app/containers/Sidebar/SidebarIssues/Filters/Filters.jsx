@@ -34,7 +34,7 @@ import type {
   IssueStatus,
   IssueFilters,
   SetSidebarFiltersOpen,
-} from '../../../types';
+} from '../../../../types';
 
 type Props = {
   setIssuesFilter: SetIssuesFilter,

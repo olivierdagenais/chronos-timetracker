@@ -5,7 +5,7 @@ import { CheckboxStateless as Checkbox } from '@atlaskit/checkbox';
 
 import { OptionContainer, OptionLabel, OptionImage } from './styled';
 
-import type { FilterOption } from '../../../types';
+import type { FilterOption } from '../../../../types';
 
 type Props = {
   option: FilterOption,

@@ -29,6 +29,7 @@ import {
   getIssuesTotalCount,
   getSelectedIssueId,
   getTrackingIssueId,
+  getSidebarFiltersOpen,
 } from 'selectors';
 import {
   IssueItemPlaceholder,
@@ -49,12 +50,15 @@ import {
 
 import IssuesHeader from './IssuesHeader';
 import IssueItem from './IssueItem';
+import NoIssues from './NoIssues';
+import Filters from './Filters';
 
 
 type Props = {
   issues: IssuesMap,
   issuesFetching: boolean,
   projectsFetching: boolean,
+  sidebarFiltersOpen: boolean,
   noItems: boolean,
   totalCount: number,
   selectedIssueId: Id | null,
@@ -70,6 +74,7 @@ const SidebarAllItems: StatelessFunctionalComponent<Props> = ({
   issues,
   issuesFetching,
   projectsFetching,
+  sidebarFiltersOpen,
   totalCount,
   selectedIssueId,
   trackingIssueId,
@@ -82,8 +87,11 @@ const SidebarAllItems: StatelessFunctionalComponent<Props> = ({
 }: Props): Node =>
   <ListContainer>
     <IssuesHeader />
+    {sidebarFiltersOpen &&
+      <Filters />
+    }
     {noItems ?
-      <h1>No items</h1> :
+      <NoIssues /> :
       <InfiniteLoader
         isRowLoaded={({ index }) => !!issues[index]}
         rowCount={totalCount}
@@ -160,6 +168,7 @@ function mapStateToProps(state) {
     selectedIssueId: getSelectedIssueId(state),
     trackingIssueId: getTrackingIssueId(state),
     refetchIssuesIndicator: state.issues.meta.refetchIssuesIndicator,
+    sidebarFiltersOpen: getSidebarFiltersOpen(state),
   };
 }
 

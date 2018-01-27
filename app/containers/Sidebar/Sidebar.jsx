@@ -23,7 +23,6 @@ import {
 } from 'selectors';
 
 import ProjectPicker from './ProjectPicker';
-import SidebarFilters from './SidebarFilters/SidebarFilters';
 import SidebarItems from './SidebarItems/SidebarItems';
 import SidebarIssues from './SidebarIssues'
 import SidebarAllItems from './SidebarItems/SidebarAllItems';

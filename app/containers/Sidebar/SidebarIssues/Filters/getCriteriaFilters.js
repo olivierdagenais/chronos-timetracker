@@ -3,7 +3,7 @@ import type {
   IssueType,
   IssueStatus,
   CriteriaFilters,
-} from '../../../types';
+} from '../../../../types';
 
 type Props = {
   issueTypes: Array<IssueType>,
