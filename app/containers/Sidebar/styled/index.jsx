@@ -59,5 +59,5 @@ export const ListContainer = styled.div`
   flex-flow: row nowrap;
   width: 870px;
   transform: translateX(${({ sidebarType }) => (sidebarType === 'all' ? -435 : 0)}px);
-  overflow: hidden;
+  overflow-x: hidden;
 `;
