@@ -1,3 +1,21 @@
+<a name="2.5.10"></a>
+## [2.5.10](https://github.com/web-pal/chronos-timetracker/compare/v2.5.9...v2.5.10) (2018-02-19)
+
+
+### Bug Fixes
+
+* **Browsing Issues:** extra fetch request ([a705116](https://github.com/web-pal/chronos-timetracker/commit/a705116))
+* **Browsing Issues:** issuesFetching for header depends on sidebarType ([94cecb1](https://github.com/web-pal/chronos-timetracker/commit/94cecb1))
+* **Tracking:** fix empty worklogs ([dd41d81](https://github.com/web-pal/chronos-timetracker/commit/dd41d81))
+
+
+### Features
+
+* **Issue Detail View:** render comments properly ([1964b07](https://github.com/web-pal/chronos-timetracker/commit/1964b07))
+* **Tracking:** control remaining estimates ([ebda033](https://github.com/web-pal/chronos-timetracker/commit/ebda033))
+
+
+
 <a name="2.5.9"></a>
 ## [2.5.9](https://github.com/web-pal/chronos-timetracker/compare/v2.5.7...v2.5.9) (2018-02-15)
 
